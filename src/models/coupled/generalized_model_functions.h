@@ -212,8 +212,8 @@ void generalizedProblem<dim>::getRHS(const MatrixFree<dim,double> &data,
 
 
   //initialize FEEvaulation objects
-  std::vector<typeScalar> scalar_vars;
-  std::vector<typeVector> vector_vars;
+  dealii::AlignedVector<typeScalar> scalar_vars;
+  dealii::AlignedVector<typeVector> vector_vars;
 
   for (unsigned int i=0; i<num_var; i++){
 	  if (varInfoListRHS[i].is_scalar){
@@ -226,10 +226,11 @@ void generalizedProblem<dim>::getRHS(const MatrixFree<dim,double> &data,
 	  }
   }
 
-  std::vector<modelVariable<dim> > modelVarList;
-  std::vector<modelResidual<dim> > modelResidualsList;
-  modelVarList.reserve(num_var);
-  modelResidualsList.reserve(num_var);
+
+  dealii::AlignedVector<modelVariable<dim> > modelVarList;
+  dealii::AlignedVector<modelResidual<dim> > modelResidualsList;
+  modelVarList.resize_fast(num_var);
+  modelResidualsList.resize_fast(num_var);
 
   //loop over cells
   for (unsigned int cell=cell_range.first; cell<cell_range.second; ++cell){
@@ -344,8 +345,8 @@ void  generalizedProblem<dim>::getLHS(const MatrixFree<dim,double> &data,
 	}
 
 	//initialize FEEvaulation objects
-	std::vector<typeScalar> scalar_vars;
-	std::vector<typeVector> vector_vars;
+	dealii::AlignedVector<typeScalar> scalar_vars;
+	dealii::AlignedVector<typeVector> vector_vars;
 
 	for (unsigned int i=0; i<num_var_LHS; i++){
 		if (varInfoListLHS[i].is_scalar){
@@ -358,8 +359,8 @@ void  generalizedProblem<dim>::getLHS(const MatrixFree<dim,double> &data,
 		}
 	}
 
-	std::vector<modelVariable<dim> > modelVarList;
-	modelVarList.reserve(num_var_LHS);
+	dealii::AlignedVector<modelVariable<dim> > modelVarList;
+	modelVarList.resize_fast(num_var);
 	modelResidual<dim> modelRes;
 
 	//loop over cells
@@ -476,24 +477,25 @@ void  generalizedProblem<dim>::getEnergy(const MatrixFree<dim,double> &data,
 				    const std::pair<unsigned int,unsigned int> &cell_range) {
 
 	//initialize FEEvaulation objects
-	  std::vector<typeScalar> scalar_vars;
-	  std::vector<typeVector> vector_vars;
+	dealii::AlignedVector<typeScalar> scalar_vars;
+	dealii::AlignedVector<typeVector> vector_vars;
 
-	  for (unsigned int i=0; i<num_var; i++){
-		  if (varInfoListRHS[i].is_scalar){
-			  typeScalar var(data, i);
-			  scalar_vars.push_back(var);
-		  }
-		  else {
-			  typeVector var(data, i);
-			  vector_vars.push_back(var);
-		  }
-	  }
+	for (unsigned int i=0; i<num_var; i++){
+		if (varInfoListRHS[i].is_scalar){
+			typeScalar var(data, i);
+			scalar_vars.push_back(var);
+		}
+		else {
+			typeVector var(data, i);
+			vector_vars.push_back(var);
+		}
+	}
 
-	  std::vector<modelVariable<dim> > modelVarList;
-	  std::vector<modelResidual<dim> > modelResidualsList;
-	  modelVarList.reserve(num_var);
-	  modelResidualsList.reserve(num_var);
+
+	dealii::AlignedVector<modelVariable<dim> > modelVarList;
+	dealii::AlignedVector<modelResidual<dim> > modelResidualsList;
+	modelVarList.resize_fast(num_var);
+	modelResidualsList.resize_fast(num_var);
 
 	  //loop over cells
 	  for (unsigned int cell=cell_range.first; cell<cell_range.second; ++cell){
