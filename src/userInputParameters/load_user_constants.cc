@@ -12,7 +12,7 @@ void userInputParameters<dim>::load_user_constants(inputFileReader & input_file_
         model_constant_name_map[input_file_reader.model_constant_names[i]] = i;
     }
 
-
+    
     for (unsigned int i=0; i<number_of_constants; i++){
         std::string constants_text = "Model constant ";
         constants_text.append(input_file_reader.model_constant_names[i]);

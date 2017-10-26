@@ -25,16 +25,28 @@ public:
 	void load_BC_list(const std::vector<std::string> list_of_BCs);
 
 	// Map linking the model constant name to its index
-	std::unordered_map<std::string,unsigned int> model_constant_name_map;
+	//std::unordered_map<std::string,unsigned int> model_constant_name_map; // Needs C++11
+	std::map<std::string,unsigned int> model_constant_name_map;
 
 	// Methods to access members of 'model_constant', one for each type (since one can't template based on return values)
 	// These are really just wrappers for Boost's 'get' function
+	// To use the "at" method on a std::map requires C++11
+	/*
 	double get_model_constant_double(const std::string constant_name) const {return boost::get<double>(model_constants[model_constant_name_map.at(constant_name)]);};
 	int get_model_constant_int(const std::string constant_name) const {return boost::get<int>(model_constants[model_constant_name_map.at(constant_name)]);};
 	bool get_model_constant_bool(const std::string constant_name) const {return boost::get<bool>(model_constants[model_constant_name_map.at(constant_name)]);};
 	dealii::Tensor<1,dim> get_model_constant_rank_1_tensor(const std::string constant_name) const {return boost::get<dealii::Tensor<1,dim> >(model_constants[model_constant_name_map.at(constant_name)]);};
 	dealii::Tensor<2,dim> get_model_constant_rank_2_tensor(const std::string constant_name) const {return boost::get<dealii::Tensor<2,dim> >(model_constants[model_constant_name_map.at(constant_name)]);};
 	dealii::Tensor<2,2*dim-1+dim/3> get_model_constant_elasticity_tensor(const std::string constant_name) const {return boost::get<dealii::Tensor<2,2*dim-1+dim/3> >(model_constants[model_constant_name_map.at(constant_name)]);};
+	*/
+
+	double get_model_constant_double(const std::string constant_name) {return boost::get<double>(model_constants[model_constant_name_map[constant_name]]);};
+	int get_model_constant_int(const std::string constant_name) {return boost::get<int>(model_constants[model_constant_name_map[constant_name]]);};
+	bool get_model_constant_bool(const std::string constant_name) {return boost::get<bool>(model_constants[model_constant_name_map[constant_name]]);};
+	dealii::Tensor<1,dim> get_model_constant_rank_1_tensor(const std::string constant_name) {return boost::get<dealii::Tensor<1,dim> >(model_constants[model_constant_name_map[constant_name]]);};
+	dealii::Tensor<2,dim> get_model_constant_rank_2_tensor(const std::string constant_name) {return boost::get<dealii::Tensor<2,dim> >(model_constants[model_constant_name_map[constant_name]]);};
+	dealii::Tensor<2,2*dim-1+dim/3> get_model_constant_elasticity_tensor(const std::string constant_name) {return boost::get<dealii::Tensor<2,2*dim-1+dim/3> >(model_constants[model_constant_name_map[constant_name]]);};
+
 
 	// Method to load in the variable attributes
 	void loadVariableAttributes(variableAttributeLoader variable_attributes);

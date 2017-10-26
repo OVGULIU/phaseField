@@ -9,7 +9,7 @@ public:
 private:
 	#include "../../include/typeDefs.h"
 
-	const userInputParameters<dim> userInputs;
+	userInputParameters<dim> userInputs;
 
 	// Pure virtual method in MatrixFreePDE
 	void residualRHS(variableContainer<dim,degree,dealii::VectorizedArray<double> > & variable_list,
